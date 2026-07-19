@@ -1519,230 +1519,74 @@ section,
 /*--------------------------------------------------------------
 # Services Section
 --------------------------------------------------------------*/
-.services {
-  padding: 100px 0;
-  background-color: var(--background-color);
+.services .img {
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .services {
-    padding: 64px 0;
-  }
+.services .img img {
+  transition: 0.6s;
 }
 
-.services .service-card {
+.services .details {
+  background: color-mix(in srgb, var(--surface-color), transparent 5%);
+  padding: 50px 30px;
+  margin: -100px 30px 0 30px;
+  transition: all ease-in-out 0.3s;
   position: relative;
-  padding: 32px;
-  border-radius: 16px;
-  background: var(--surface-color);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0px 0 25px rgba(0, 0, 0, 0.1);
 }
 
-.services .service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-}
-
-.services .service-card:hover .icon-wrapper {
+.services .details .icon {
+  margin: 0;
+  width: 72px;
+  height: 72px;
   background: var(--accent-color);
-}
-
-.services .service-card:hover .icon-wrapper i {
   color: var(--contrast-color);
-}
-
-.services .service-card:hover .service-link i {
-  transform: translateX(4px);
-}
-
-.services .service-card.featured {
-  background: var(--accent-color);
-  transform: scale(1.02);
-}
-
-@media (min-width: 992px) {
-  .services .service-card.featured {
-    transform: scale(1.05);
-  }
-}
-
-.services .service-card.featured:hover {
-  transform: scale(1.02) translateY(-8px);
-}
-
-@media (min-width: 992px) {
-  .services .service-card.featured:hover {
-    transform: scale(1.05) translateY(-8px);
-  }
-}
-
-.services .service-card.featured .icon-wrapper {
-  background: color-mix(in srgb, var(--contrast-color) 20%, transparent);
-}
-
-.services .service-card.featured .icon-wrapper i {
-  color: var(--contrast-color);
-}
-
-.services .service-card.featured h3 {
-  color: var(--contrast-color);
-}
-
-.services .service-card.featured p {
-  color: color-mix(in srgb, var(--contrast-color) 85%, transparent);
-}
-
-.services .service-card.featured .service-link {
-  color: var(--contrast-color);
-}
-
-.services .service-card.featured .service-link:hover {
-  color: var(--contrast-color);
-}
-
-.services .service-card .featured-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  border: 6px solid var(--contrast-color);
   border-radius: 50px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  background: color-mix(in srgb, var(--contrast-color) 20%, transparent);
-  color: var(--contrast-color);
-}
-
-.services .service-card .featured-badge i {
-  font-size: 10px;
-}
-
-.services .service-card .icon-wrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
-  transition: all 0.3s ease;
-}
-
-.services .service-card .icon-wrapper i {
+  margin-bottom: 20px;
   font-size: 28px;
-  color: var(--accent-color);
-  transition: all 0.3s ease;
+  transition: ease-in-out 0.3s;
+  position: absolute;
+  top: -36px;
+  left: calc(50% - 36px);
 }
 
-.services .service-card h3 {
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  color: var(--heading-color);
+.services .details h3 {
+  font-weight: 700;
+  margin: 10px 0 15px 0;
+  font-size: 22px;
+  transition: ease-in-out 0.3s;
 }
 
-.services .service-card p {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--default-color);
-  margin-bottom: 24px;
-  flex-grow: 1;
-}
-
-.services .service-card .service-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.services .details p {
+  color: color-mix(in srgb, var(--default-color), transparent 10%);
+  line-height: 24px;
   font-size: 14px;
-  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.services .service-item:hover .details h3 {
   color: var(--accent-color);
-  transition: all 0.3s ease;
 }
 
-.services .service-card .service-link i {
-  font-size: 16px;
-  transition: transform 0.3s ease;
+.services .service-item:hover .details .icon {
+  background: var(--surface-color);
+  border: 2px solid var(--accent-color);
 }
 
-.services .service-card .service-link:hover {
-  color: color-mix(in srgb, var(--accent-color) 80%, black);
-}
-
-@media (max-width: 768px) {
-  .services .service-card {
-    padding: 24px;
-  }
-
-  .services .service-card .icon-wrapper {
-    width: 48px;
-    height: 48px;
-  }
-
-  .services .service-card .icon-wrapper i {
-    font-size: 24px;
-  }
-
-  .services .service-card h3 {
-    font-size: 18px;
-  }
-}
-
-.services .stats-row {
-  margin-top: 64px;
-  padding: 48px 32px;
-  background: color-mix(in srgb, var(--accent-color) 8%, transparent);
-  border-radius: 16px;
-}
-
-@media (max-width: 768px) {
-  .services .stats-row {
-    margin-top: 48px;
-    padding: 32px 24px;
-  }
-}
-
-.services .stats-row .stat-item {
-  text-align: center;
-}
-
-.services .stats-row .stat-item .stat-number {
-  display: block;
-  font-size: 36px;
-  font-weight: 800;
-  line-height: 1;
+.services .service-item:hover .details .icon i {
   color: var(--accent-color);
-  margin-bottom: 8px;
 }
 
-@media (max-width: 768px) {
-  .services .stats-row .stat-item .stat-number {
-    font-size: 28px;
-  }
-}
-
-.services .stats-row .stat-item .stat-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--default-color);
-}
-
-@media (max-width: 768px) {
-  .services .stats-row .stat-item .stat-label {
-    font-size: 12px;
-  }
+.services .service-item:hover .img img {
+  transform: scale(1.2);
 }
 
 /*--------------------------------------------------------------
