@@ -1,1 +1,0 @@
-# karsaprintart.github.io
