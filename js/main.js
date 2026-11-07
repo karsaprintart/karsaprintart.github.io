@@ -277,6 +277,31 @@
         $('.js-modal1').removeClass('show-modal1');
     });
 
+    /*==================================================================
+    [ Custom Karsa Print Art - Banner Click to Filter ]*/
+    $('.js-banner-filter').on('click', function(e){
+        e.preventDefault(); // Mencegah lompatan kasar
+        
+        var filterValue = $(this).attr('data-target');
+        var newTitle = $(this).attr('data-title');
+
+        // 1. Ubah teks judul katalog
+        $('#judul-katalog').text(newTitle);
+
+        // 2. Aktifkan filter Isotope secara otomatis
+        $('.isotope-grid').isotope({filter: filterValue});
+
+        // 3. Sinkronkan tombol filter agar ikut menyala
+        $('.filter-tope-group button').removeClass('how-active1');
+        $('.filter-tope-group button[data-filter="'+filterValue+'"]').addClass('how-active1');
+
+        // 4. Efek meluncur (scroll) mulus ke area katalog
+        $('html, body').animate({
+            scrollTop: $('#katalog').offset().top - 70
+        }, 800);
+    });
+
+
 
 
 })(jQuery);
