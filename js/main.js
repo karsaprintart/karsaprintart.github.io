@@ -1,4 +1,3 @@
-
 (function ($) {
     "use strict";
 
@@ -45,20 +44,12 @@
     [ Fixed Header ]*/
     var headerDesktop = $('.container-menu-desktop');
     var wrapMenu = $('.wrap-menu-desktop');
-
-    if($('.top-bar').length > 0) {
-        var posWrapHeader = $('.top-bar').height();
-    }
-    else {
-        var posWrapHeader = 0;
-    }
-    
+    var posWrapHeader = $('.top-bar').length > 0 ? $('.top-bar').height() : 0;
 
     if($(window).scrollTop() > posWrapHeader) {
         $(headerDesktop).addClass('fix-menu-desktop');
         $(wrapMenu).css('top',0); 
-    }  
-    else {
+    } else {
         $(headerDesktop).removeClass('fix-menu-desktop');
         $(wrapMenu).css('top',posWrapHeader - $(this).scrollTop()); 
     }
@@ -67,8 +58,7 @@
         if($(this).scrollTop() > posWrapHeader) {
             $(headerDesktop).addClass('fix-menu-desktop');
             $(wrapMenu).css('top',0); 
-        }  
-        else {
+        } else {
             $(headerDesktop).removeClass('fix-menu-desktop');
             $(wrapMenu).css('top',posWrapHeader - $(this).scrollTop()); 
         } 
@@ -88,7 +78,7 @@
         $(arrowMainMenu[i]).on('click', function(){
             $(this).parent().find('.sub-menu-m').slideToggle();
             $(this).toggleClass('turn-arrow-main-menu-m');
-        })
+        });
     }
 
     $(window).resize(function(){
@@ -99,12 +89,11 @@
             }
 
             $('.sub-menu-m').each(function(){
-                if($(this).css('display') == 'block') { console.log('hello');
+                if($(this).css('display') == 'block') {
                     $(this).css('display','none');
                     $(arrowMainMenu).removeClass('turn-arrow-main-menu-m');
                 }
             });
-                
         }
     });
 
@@ -127,48 +116,7 @@
 
 
     /*==================================================================
-    [ Isotope ]*/
-    var $topeContainer = $('.isotope-grid');
-    var $filter = $('.filter-tope-group');
-
-    // filter items on button click
-    $filter.each(function () {
-        $filter.on('click', 'button', function () {
-            var filterValue = $(this).attr('data-filter');
-            $topeContainer.isotope({filter: filterValue});
-        });
-        
-    });
-
-    // init Isotope
-    $(window).on('load', function () {
-        var $grid = $topeContainer.each(function () {
-            $(this).isotope({
-                itemSelector: '.isotope-item',
-                layoutMode: 'fitRows',
-                percentPosition: true,
-                animationEngine : 'best-available',
-                masonry: {
-                    columnWidth: '.isotope-item'
-                }
-            });
-        });
-    });
-
-    var isotopeButton = $('.filter-tope-group button');
-
-    $(isotopeButton).each(function(){
-        $(this).on('click', function(){
-            for(var i=0; i<isotopeButton.length; i++) {
-                $(isotopeButton[i]).removeClass('how-active1');
-            }
-
-            $(this).addClass('how-active1');
-        });
-    });
-
-    /*==================================================================
-    [ Filter / Search product ]*/
+    [ Filter / Search product panel toggle ]*/
     $('.js-show-filter').on('click',function(){
         $(this).toggleClass('show-filter');
         $('.panel-filter').slideToggle(400);
@@ -190,10 +138,8 @@
     });
 
 
-
-
     /*==================================================================
-    [ Cart ]*/
+    [ Cart & Sidebar ]*/
     $('.js-show-cart').on('click',function(){
         $('.js-panel-cart').addClass('show-header-cart');
     });
@@ -202,8 +148,6 @@
         $('.js-panel-cart').removeClass('show-header-cart');
     });
 
-    /*==================================================================
-    [ Cart ]*/
     $('.js-show-sidebar').on('click',function(){
         $('.js-sidebar').addClass('show-sidebar');
     });
@@ -211,6 +155,7 @@
     $('.js-hide-sidebar').on('click',function(){
         $('.js-sidebar').removeClass('show-sidebar');
     });
+
 
     /*==================================================================
     [ +/- num product ]*/
@@ -224,120 +169,165 @@
         $(this).prev().val(numProduct + 1);
     });
 
+
     /*==================================================================
-    [ Rating ]*/
-    $('.wrap-rating').each(function(){
-        var item = $(this).find('.item-rating');
-        var rated = -1;
-        var input = $(this).find('input');
-        $(input).val(0);
-
-        $(item).on('mouseenter', function(){
-            var index = item.index(this);
-            var i = 0;
-            for(i=0; i<=index; i++) {
-                $(item[i]).removeClass('zmdi-star-outline');
-                $(item[i]).addClass('zmdi-star');
-            }
-
-            for(var j=i; j<item.length; j++) {
-                $(item[j]).addClass('zmdi-star-outline');
-                $(item[j]).removeClass('zmdi-star');
-            }
-        });
-
-        $(item).on('click', function(){
-            var index = item.index(this);
-            rated = index;
-            $(input).val(index+1);
-        });
-
-        $(this).on('mouseleave', function(){
-            var i = 0;
-            for(i=0; i<=rated; i++) {
-                $(item[i]).removeClass('zmdi-star-outline');
-                $(item[i]).addClass('zmdi-star');
-            }
-
-            for(var j=i; j<item.length; j++) {
-                $(item[j]).addClass('zmdi-star-outline');
-                $(item[j]).removeClass('zmdi-star');
-            }
-        });
-    });
-    
-    /*==================================================================
-    [ Show modal1 ]*/
-    $('.js-show-modal1').on('click',function(e){
-        e.preventDefault();
-        $('.js-modal1').addClass('show-modal1');
-    });
-
+    [ Show / hide modal1 ]*/
     $('.js-hide-modal1').on('click',function(){
         $('.js-modal1').removeClass('show-modal1');
     });
 
+
     /*==================================================================
-    [ Custom Karsa Print Art - Banner Click to Filter ]*/
+    [ Karsa Print Art - Koneksi Supabase, Filter & Pencarian ]*/
+    const supabaseUrl = 'https://citfcbsciqcbjyplxfef.supabase.co';
+    const supabaseKey = 'sb_publishable_ab9-Z2v-0mPDO4xDyVS26w_0jv6l7rX';
+    const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let semuaProduk = [];
+    let kategoriAktif = '*';
+    let kataKunciCari = '';
+
+    // Fungsi menyaring dan mencetak kartu block2 ke #katalog-container
+    function renderKatalog() {
+        const container = document.getElementById('katalog-container');
+        if (!container) return;
+
+        const katBersih = kategoriAktif.replace('.', '').toLowerCase();
+        const cariBersih = kataKunciCari.trim().toLowerCase();
+
+        const hasilFilter = semuaProduk.filter((item) => {
+            const katItem = (item.kategori || '').toLowerCase();
+            const cocokKategori = (katBersih === '*' || katItem === katBersih);
+
+            const nama = (item.nama_produk || '').toLowerCase();
+            const deskripsi = (item.deskripsi || '').toLowerCase();
+            const cocokCari = (cariBersih === '' || nama.includes(cariBersih) || deskripsi.includes(cariBersih));
+
+            return cocokKategori && cocokCari;
+        });
+
+        if (hasilFilter.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 txt-center p-tb-40">
+                    <p class="stext-107 cl6">Layanan atau produk yang dicari belum tersedia.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        hasilFilter.forEach((item) => {
+            const hargaFormat = Number(item.harga_mulai).toLocaleString('id-ID');
+            const gambar = item.gambar_url || 'images/product-01.jpg';
+
+            container.innerHTML += `
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            <img src="${gambar}" alt="${item.nama_produk}">
+                            <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-detail-karsa" data-id="${item.id}">
+                                Quick View
+                            </a>
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14">
+                            <div class="block2-txt-child1 flex-col-l">
+                                <a href="#" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6 js-detail-karsa" data-id="${item.id}">
+                                    ${item.nama_produk}
+                                </a>
+                                <span class="stext-105 cl3">
+                                    Mulai Rp ${hargaFormat}
+                                </span>
+                            </div>
+
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <span class="stext-109 cl6" style="text-transform: uppercase;">
+                                    ${item.kategori || ''}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Ambil data awal dari tabel katalog_layanan
+    async function muatKatalog() {
+        const container = document.getElementById('katalog-container');
+        const { data, error } = await db
+            .from('katalog_layanan')
+            .select('*')
+            .order('id', { ascending: true });
+
+        if (error) {
+            console.error('Gagal mengambil data:', error);
+            container.innerHTML = '<div class="col-12"><p>Gagal memuat katalog layanan.</p></div>';
+            return;
+        }
+
+        semuaProduk = data || [];
+        renderKatalog();
+    }
+
+    // 1. Klik tombol kategori (Semua Layanan, Produk Karsa, Produk Cetak, Jasa Desain)
+    $('.filter-tope-group').on('click', 'button', function () {
+        $('.filter-tope-group button').removeClass('how-active1');
+        $(this).addClass('how-active1');
+
+        kategoriAktif = $(this).attr('data-filter');
+        const namaTombol = $(this).text().trim();
+        $('#judul-katalog').text(kategoriAktif === '*' ? 'Katalog Layanan' : namaTombol);
+
+        renderKatalog();
+    });
+
+    // 2. Klik 3 Banner di atas untuk lompat dan menyaring kategori
     $('.js-banner-filter').on('click', function(e){
-        e.preventDefault(); // Mencegah lompatan kasar
+        e.preventDefault();
         
         var filterValue = $(this).attr('data-target');
         var newTitle = $(this).attr('data-title');
 
-        // 1. Ubah teks judul katalog
+        kategoriAktif = filterValue;
         $('#judul-katalog').text(newTitle);
 
-        // 2. Aktifkan filter Isotope secara otomatis
-        $('.isotope-grid').isotope({filter: filterValue});
-
-        // 3. Sinkronkan tombol filter agar ikut menyala
         $('.filter-tope-group button').removeClass('how-active1');
         $('.filter-tope-group button[data-filter="'+filterValue+'"]').addClass('how-active1');
 
-        // 4. Efek meluncur (scroll) mulus ke area katalog
+        renderKatalog();
+
         $('html, body').animate({
             scrollTop: $('#katalog').offset().top - 70
         }, 800);
     });
 
-// 1. Konfigurasi koneksi Supabase
-const supabaseUrl = 'https://citfcbsciqcbjyplxfef.supabase.co';
-const supabaseKey = 'sb_publishable_ab9-Z2v-0mPDO4xDyVS26w_0jv6l7rX';
-const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // 3. Pencarian langsung saat mengetik di kotak Search
+    $(document).on('input', '#input-pencarian', function () {
+        kataKunciCari = $(this).val();
+        renderKatalog();
+    });
 
-// 2. Fungsi menarik data dari tabel katalog_layanan
-async function muatKatalog() {
-  const container = document.getElementById('katalog-container');
+    // 4. Buka Pop-up Quick View sesuai produk yang diklik
+    $(document).on('click', '.js-detail-karsa', function (e) {
+        e.preventDefault();
+        const idProduk = $(this).data('id');
+        const produk = semuaProduk.find((p) => p.id == idProduk);
+        if (!produk) return;
 
-  const { data, error } = await db
-    .from('katalog_layanan')
-    .select('*');
+        const hargaFormat = Number(produk.harga_mulai).toLocaleString('id-ID');
+        $('.js-modal1 .js-name-detail').text(produk.nama_produk);
+        $('.js-modal1 .mtext-106').text('Mulai Rp ' + hargaFormat);
+        $('.js-modal1 .stext-102').text(produk.deskripsi || 'Konsultasikan kebutuhan visual Anda bersama Karsa Print Art.');
+        
+        if (produk.gambar_url) {
+            $('.js-modal1 .gallery-lb img').attr('src', produk.gambar_url);
+        }
 
-  if (error) {
-    console.error('Gagal mengambil data:', error);
-    container.innerHTML = '<p>Gagal memuat katalog layanan.</p>';
-    return;
-  }
+        $('.js-modal1').addClass('show-modal1');
+    });
 
-  // Kosongkan teks "Memuat katalog..." lalu cetak setiap produk
-  container.innerHTML = '';
-  data.forEach((item) => {
-    const hargaFormat = Number(item.harga_mulai).toLocaleString('id-ID');
-    container.innerHTML += `
-      <div class="kartu-produk">
-        <img src="${item.gambar_url}" alt="${item.nama_produk}" style="width: 100%; max-width: 250px;">
-        <span class="label-kategori">${item.kategori}</span>
-        <h3>${item.nama_produk}</h3>
-        <p>${item.deskripsi}</p>
-        <p><strong>Mulai Rp ${hargaFormat}</strong></p>
-      </div>
-    `;
-  });
-}
-
-// Jalankan fungsi saat halaman dibuka
-muatKatalog();
-
+    // Jalankan saat halaman selesai dimuat
+    muatKatalog();
 
 })(jQuery);
