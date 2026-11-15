@@ -316,17 +316,57 @@
         if (!produk) return;
 
         const hargaFormat = Number(produk.harga_mulai).toLocaleString('id-ID');
+        const gambarUtama = produk.gambar_url || 'images/product-01.jpg';
+
         $('.js-modal1 .js-name-detail').text(produk.nama_produk);
         $('.js-modal1 .mtext-106').text('Mulai Rp ' + hargaFormat);
         $('.js-modal1 .stext-102').text(produk.deskripsi || 'Konsultasikan kebutuhan visual Anda bersama Karsa Print Art.');
         
-        if (produk.gambar_url) {
-            $('.js-modal1 .gallery-lb img').attr('src', produk.gambar_url);
+        // Set gambar utama & tombol zoom
+        $('#modal-gambar').attr('src', gambarUtama).attr('alt', produk.nama_produk);
+        $('#modal-zoom').attr('href', gambarUtama);
+
+        // Bersihkan dan buat thumbnail otomatis jika kolom galeri_url terisi
+        const thumbContainer = $('#modal-thumbnails');
+        thumbContainer.empty();
+
+        if (produk.galeri_url) {
+            const daftarGambar = produk.galeri_url
+                .split(',')
+                .map((url) => url.trim())
+                .filter((url) => url !== '');
+
+            if (daftarGambar.length > 1) {
+                daftarGambar.forEach((url, index) => {
+                    const gayaBorder = index === 0 ? '2px solid #195EBF' : '1px solid #e6e6e6';
+                    thumbContainer.append(`
+                        <img src="${url}" 
+                             class="item-thumb-modal pointer" 
+                             style="width: 65px; height: 65px; object-fit: cover; border: ${gayaBorder}; border-radius: 4px;" 
+                             alt="Preview ${index + 1}">
+                    `);
+                });
+            }
         }
+
+        // Isi pesan WhatsApp otomatis
+        const pesanWA = encodeURIComponent(`Halo Karsa Print Art, saya tertarik dengan layanan *${produk.nama_produk}* (Mulai Rp ${hargaFormat}). Boleh diskusi lebih lanjut?`);
+        $('#btn-wa-modal').attr('href', `https://wa.me/628XXXXXXXXXX?text=${pesanWA}`);
 
         $('.js-modal1').addClass('show-modal1');
     });
 
+    // Ganti foto utama saat salah satu thumbnail kecil diklik
+    $(document).on('click', '.item-thumb-modal', function () {
+        const urlBaru = $(this).attr('src');
+        $('#modal-gambar').attr('src', urlBaru);
+        $('#modal-zoom').attr('href', urlBaru);
+
+        $('.item-thumb-modal').css('border', '1px solid #e6e6e6');
+        $(this).css('border', '2px solid #195EBF');
+    });
+
+    
     // Jalankan saat halaman selesai dimuat
     muatKatalog();
 
