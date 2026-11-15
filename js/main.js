@@ -301,7 +301,43 @@
         }, 800);
     });
 
+// 1. Konfigurasi koneksi Supabase
+const supabaseUrl = 'https://citfcbsciqcbjyplxfef.supabase.co';
+const supabaseKey = 'sb_publishable_ab9-Z2v-0mPDO4xDyVS26w_0jv6l7rX';
+const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+// 2. Fungsi menarik data dari tabel katalog_layanan
+async function muatKatalog() {
+  const container = document.getElementById('katalog-container');
+
+  const { data, error } = await db
+    .from('katalog_layanan')
+    .select('*');
+
+  if (error) {
+    console.error('Gagal mengambil data:', error);
+    container.innerHTML = '<p>Gagal memuat katalog layanan.</p>';
+    return;
+  }
+
+  // Kosongkan teks "Memuat katalog..." lalu cetak setiap produk
+  container.innerHTML = '';
+  data.forEach((item) => {
+    const hargaFormat = Number(item.harga_mulai).toLocaleString('id-ID');
+    container.innerHTML += `
+      <div class="kartu-produk">
+        <img src="${item.gambar_url}" alt="${item.nama_produk}" style="width: 100%; max-width: 250px;">
+        <span class="label-kategori">${item.kategori}</span>
+        <h3>${item.nama_produk}</h3>
+        <p>${item.deskripsi}</p>
+        <p><strong>Mulai Rp ${hargaFormat}</strong></p>
+      </div>
+    `;
+  });
+}
+
+// Jalankan fungsi saat halaman dibuka
+muatKatalog();
 
 
 })(jQuery);
